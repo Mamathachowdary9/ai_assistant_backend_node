@@ -115,6 +115,8 @@ function getIntentFromMessage(message) {
   return "full";
 }
 
+const MODEL = "TinyLlama/TinyLlama-1.1B-Chat-v1.0";
+
 function generatePrompt(product, message) {
   const intent = getIntentFromMessage(message);
 
@@ -147,27 +149,23 @@ app.post("/chat", async (req, res) => {
   const prompt = generatePrompt(product, message);
 
   try {
-    const ollamaResponse = await axios.post(
-      "http://ollama:11434/api/generate",
+    const hfResponse = await axios.post(
+      `https://api-inference.huggingface.co/models/${MODEL}`,
+      { inputs: prompt },
       {
-        model: "tinyllama",
-        prompt,
-        stream: false,
+        headers: {
+          Authorization: `Bearer ${process.env.HF_API_TOKEN}`,
+        },
       }
     );
-    const aiMessage = ollamaResponse.data.response;
-    console.log(aiMessage);
-    res.json({ response: aiMessage?.trim() });
-  } catch (err) {
-    const errorResponse = {
-      id: (Date.now() + 2).toString(),
-      text: "Oops! Something went wrong while fetching the response.",
-      sender: "ai",
-      timestamp: new Date(),
-      productId,
-    };
-    console.log(errorResponse);
-    res.json({ response: errorResponse?.trim() });
+
+    const responseText =
+      hfResponse.data?.[0]?.generated_text || "No response generated";
+
+    res.json({ response: responseText.trim() });
+  } catch (error) {
+    console.error("Hugging Face Error:", error.message);
+    res.status(500).json({ error: "Failed to generate AI response" });
   }
 });
 
