@@ -115,8 +115,6 @@ function getIntentFromMessage(message) {
   return "full";
 }
 
-const MODEL = "gpt2";
-
 function generatePrompt(product, message) {
   const intent = getIntentFromMessage(message);
 
@@ -150,7 +148,7 @@ app.post("/chat", async (req, res) => {
 
   try {
     const hfResponse = await axios.post(
-      `https://api-inference.huggingface.co/models/${MODEL}`,
+      `https://api-inference.huggingface.co/models/${process.env.MODEL}`,
       { inputs: prompt },
 
       {
