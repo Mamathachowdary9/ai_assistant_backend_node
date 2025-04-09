@@ -224,23 +224,23 @@ function getIntentFromMessage(message) {
 
 function generatePrompt(product, message) {
   const intent = getIntentFromMessage(message);
-
   const responses = {
-    refundStatus: `Refund status: *${product.refundStatus}*. Refunds are usually processed within 3–5 business days.`,
-    refundAmount: `The refund amount processed for your order is ₹${product.refundAmount}.`,
-    deliveryDate: `The expected delivery date is *${product.deliveryDate}*. We’ll keep you posted with tracking updates.`,
+    productDescription: `Product Description for *${product.name}*:\n${product.description}`,
+    price: `The price of *${product.name}* is ₹${product.price}.`,
     productName: `You're checking on: *${product.name}*.`,
-    price: `The price of this product is ₹${product.price}.`,
-    storePolicy: `Store Policy:\n${product.storePolicy}`,
-    orderStatus: `Your order is currently *${product.status}*. You'll get a notification once it's out for delivery or delivered.`,
-    orderDetails: `Here's your order summary:\n• Product: ${product.name}\n• Status: ${product.status}\n• Delivery by: ${product.deliveryDate}`,
     productAvailability: `${product.inStock ? "Yes" : "No"}, *${
       product.name
     }* is ${
       product.inStock ? "currently in stock" : "not available right now"
     }.`,
-    productUsage: `Usage instructions for *${product.name}*:\n${product.usageInstructions}`,
+    productUsage: `How to use *${product.name}*:\n${product.usageInstructions}`,
     productWarranty: `*${product.name}* comes with a warranty of ${product.warrantyPeriod}.`,
+    orderStatus: `Your order is currently *${product.status}*. You'll get a notification once it's out for delivery or delivered.`,
+    deliveryDate: `The expected delivery date is *${product.deliveryDate}*. We’ll keep you posted with tracking updates.`,
+    refundStatus: `Refund status: *${product.refundStatus}*. Refunds are usually processed within 3–5 business days.`,
+    refundAmount: `The refund amount processed for your order is ₹${product.refundAmount}.`,
+    storePolicy: `Store Policy for *${product.name}*:\n${product.storePolicy}`,
+    orderDetails: `Here's your order summary:\n• Product: ${product.name}\n• Status: ${product.status}\n• Delivery by: ${product.deliveryDate}`,
     unknown: `I'm not sure how to answer that. Could you please rephrase your question?`,
   };
 
