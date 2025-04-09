@@ -147,21 +147,15 @@ app.post("/chat", async (req, res) => {
   const prompt = generatePrompt(product, message);
 
   try {
-    const ollamaResponse = await axios.post(process.env.OLLAMA_API_URL, {
-      model: process.env.MODEL,
-      prompt,
-      stream: false,
-    });
+    const ollamaResponse = await axios.post(
+      "http://localhost:11434/api/generate",
+      {
+        model: "tinyllama",
+        prompt,
+        stream: false,
+      }
+    );
     const aiMessage = ollamaResponse.data.response;
-
-    const aiResponse = {
-      id: (Date.now() + 1).toString(),
-      text: aiMessage.trim() || "Sorry, I couldn't understand that.",
-      sender: "ai",
-      timestamp: new Date(),
-      productId,
-    };
-
     res.json({ response: aiMessage.trim() });
   } catch (err) {
     const errorResponse = {
