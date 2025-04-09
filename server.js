@@ -159,11 +159,18 @@ function getIntentFromMessage(message) {
     return "productName";
 
   if (
-    /is it in stock|product.*availability|available now|can i buy it|product.*stock|still in stock/.test(
+    /product.*availability|available now|can i buy it|is it available|do you sell this/.test(
       lower
     )
   )
     return "productAvailability";
+
+  if (
+    /is it in stock|still in stock|product.*stock|is there stock left|check stock/.test(
+      lower
+    )
+  )
+    return "inStock";
 
   if (
     /how to use|instructions|usage guide|how does it work|how do i use this|operate the product/.test(
@@ -228,9 +235,8 @@ function generatePrompt(product, message) {
     productDescription: `Product Description for *${product.name}*:\n${product.description}`,
     price: `The price of *${product.name}* is ₹${product.price}.`,
     productName: `You're checking on: *${product.name}*.`,
-    productAvailability: `${product.inStock ? "Yes" : "No"}, *${
-      product.name
-    }* is ${
+    productAvailability: `*${product.name}* is a product available in our store.`,
+    inStock: `${product.inStock ? "Yes" : "No"}, *${product.name}* is ${
       product.inStock ? "currently in stock" : "not available right now"
     }.`,
     productUsage: `How to use *${product.name}*:\n${product.usageInstructions}`,
