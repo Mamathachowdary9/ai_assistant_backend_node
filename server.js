@@ -106,13 +106,94 @@ const products = [
 
 function getIntentFromMessage(message) {
   const lower = message.toLowerCase();
-  if (lower.includes("status")) return "status";
-  if (lower.includes("refund")) return "refundStatus";
-  if (lower.includes("delivery")) return "deliveryDate";
-  if (lower.includes("order")) return "name";
-  if (lower.includes("policy")) return "storePolicy";
-  if (lower.includes("price")) return "price";
-  return "full";
+
+  // 1. Refund status
+  if (
+    lower.includes("refund status") ||
+    lower.includes("is my refund processed") ||
+    lower.includes("has my refund been issued") ||
+    lower.includes("when will i get my refund")
+  )
+    return "refundStatus";
+
+  // 2. Refund amount
+  if (
+    lower.includes("refund amount") ||
+    lower.includes("how much will i get back") ||
+    lower.includes("how much refund") ||
+    lower.includes("amount refunded")
+  )
+    return "refundAmount";
+
+  // 3. Delivery date/status
+  if (
+    lower.includes("delivery date") ||
+    lower.includes("when will it arrive") ||
+    lower.includes("when is delivery") ||
+    lower.includes("expected delivery") ||
+    lower.includes("delivery status") ||
+    lower.includes("shipping date")
+  )
+    return "deliveryDate";
+
+  // 4. Product name/details
+  if (
+    lower.includes("product name") ||
+    lower.includes("what is the product") ||
+    lower.includes("name of the item") ||
+    lower.includes("what did i order") ||
+    lower.includes("what product")
+  )
+    return "productName";
+
+  // 5. Price/cost
+  if (
+    lower.includes("price") ||
+    lower.includes("how much") ||
+    lower.includes("cost") ||
+    lower.includes("what's the price") ||
+    lower.includes("product cost")
+  )
+    return "price";
+
+  // 6. Return / Exchange / Policy
+  if (
+    lower.includes("return policy") ||
+    lower.includes("refund policy") ||
+    lower.includes("exchange policy") ||
+    lower.includes("can i return") ||
+    lower.includes("can i exchange") ||
+    lower.includes("what is your policy")
+  )
+    return "storePolicy";
+
+  // 7. Order status
+  if (
+    lower.includes("order status") ||
+    lower.includes("where is my order") ||
+    lower.includes("track my order") ||
+    lower.includes("status of order")
+  )
+    return "orderStatus";
+
+  // 8. General order details
+  if (
+    lower.includes("order details") ||
+    lower.includes("order summary") ||
+    lower.includes("my order")
+  )
+    return "orderDetails";
+
+  // 9. Fallback: generic status
+  if (
+    lower.includes("status") ||
+    lower.includes("is it done") ||
+    lower.includes("update me")
+  )
+    return "genericStatus";
+
+  // 10. Default
+  return "full"; // fallback for other messages
 }
 
 function generatePrompt(product, message) {
@@ -150,7 +231,6 @@ app.post("/chat", async (req, res) => {
     const hfResponse = await axios.post(
       `https://api-inference.huggingface.co/models/${process.env.MODEL}`,
       { inputs: prompt },
-
       {
         headers: {
           Authorization: `Bearer ${process.env.HF_API_TOKEN}`,
