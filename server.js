@@ -115,7 +115,7 @@ function getIntentFromMessage(message) {
   return "full";
 }
 
-const MODEL = "TinyLlama/TinyLlama-1.1B-Chat-v1.0";
+const MODEL = "gpt2";
 
 function generatePrompt(product, message) {
   const intent = getIntentFromMessage(message);
@@ -152,6 +152,7 @@ app.post("/chat", async (req, res) => {
     const hfResponse = await axios.post(
       `https://api-inference.huggingface.co/models/${MODEL}`,
       { inputs: prompt },
+
       {
         headers: {
           Authorization: `Bearer ${process.env.HF_API_TOKEN}`,
