@@ -4,11 +4,11 @@ const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.FRONTEND_ORIGIN,
   })
 );
 app.use(express.json());
@@ -147,14 +147,11 @@ app.post("/chat", async (req, res) => {
   const prompt = generatePrompt(product, message);
 
   try {
-    const ollamaResponse = await axios.post(
-      "http://localhost:11434/api/generate",
-      {
-        model: "tinyllama",
-        prompt,
-        stream: false,
-      }
-    );
+    const ollamaResponse = await axios.post(process.env.OLLAMA_API_URL, {
+      model: process.env.MODEL,
+      prompt,
+      stream: false,
+    });
     const aiMessage = ollamaResponse.data.response;
 
     const aiResponse = {
