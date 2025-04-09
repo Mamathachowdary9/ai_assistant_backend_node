@@ -107,93 +107,86 @@ const products = [
 function getIntentFromMessage(message) {
   const lower = message.toLowerCase();
 
-  // 1. Refund status
+  // Refund status
   if (
-    lower.includes("refund status") ||
-    lower.includes("is my refund processed") ||
-    lower.includes("has my refund been issued") ||
-    lower.includes("when will i get my refund")
+    /refund status|is my refund processed|has my refund been issued|when.*refund/.test(
+      lower
+    )
   )
     return "refundStatus";
 
-  // 2. Refund amount
+  // Refund amount
   if (
-    lower.includes("refund amount") ||
-    lower.includes("how much will i get back") ||
-    lower.includes("how much refund") ||
-    lower.includes("amount refunded")
+    /refund amount|how much.*refund|amount refunded|how much will i get back/.test(
+      lower
+    )
   )
     return "refundAmount";
 
-  // 3. Delivery date/status
+  // Delivery details
   if (
-    lower.includes("delivery date") ||
-    lower.includes("when will it arrive") ||
-    lower.includes("when is delivery") ||
-    lower.includes("expected delivery") ||
-    lower.includes("delivery status") ||
-    lower.includes("shipping date")
+    /delivery date|when.*arrive|expected delivery|shipping date|delivered by|delivery time/.test(
+      lower
+    )
   )
     return "deliveryDate";
 
-  // 4. Product name/details
+  // Product name/details
   if (
-    lower.includes("product name") ||
-    lower.includes("what is the product") ||
-    lower.includes("name of the item") ||
-    lower.includes("what did i order") ||
-    lower.includes("what product")
+    /product name|what.*product|name of the item|what did i order|product details/.test(
+      lower
+    )
   )
     return "productName";
 
-  // 5. Price/cost
+  // Product price/cost
   if (
-    lower.includes("price") ||
-    lower.includes("how much") ||
-    lower.includes("cost") ||
-    lower.includes("what's the price") ||
-    lower.includes("product cost")
+    /price|how much.*cost|cost of the product|what's the price|product cost/.test(
+      lower
+    )
   )
     return "price";
 
-  // 6. Return / Exchange / Policy
+  // Store policy (return, exchange, refund)
   if (
-    lower.includes("return policy") ||
-    lower.includes("refund policy") ||
-    lower.includes("exchange policy") ||
-    lower.includes("can i return") ||
-    lower.includes("can i exchange") ||
-    lower.includes("what is your policy")
+    /return policy|refund policy|exchange policy|can i return|can i exchange|store policy/.test(
+      lower
+    )
   )
     return "storePolicy";
 
-  // 7. Order status
+  // Order status
   if (
-    lower.includes("order status") ||
-    lower.includes("where is my order") ||
-    lower.includes("track my order") ||
-    lower.includes("status of order")
+    /order status|where.*order|track my order|status of my order|order update/.test(
+      lower
+    )
   )
     return "orderStatus";
 
-  // 8. General order details
+  // Order summary/details
   if (
-    lower.includes("order details") ||
-    lower.includes("order summary") ||
-    lower.includes("my order")
+    /order summary|order details|what did i order|show me my order/.test(lower)
   )
     return "orderDetails";
 
-  // 9. Fallback: generic status
+  // Product availability
   if (
-    lower.includes("status") ||
-    lower.includes("is it done") ||
-    lower.includes("update me")
+    /is it in stock|availability|available now|can i buy it|available to order/.test(
+      lower
+    )
   )
-    return "genericStatus";
+    return "productAvailability";
 
-  // 10. Default
-  return "full"; // fallback for other messages
+  // Product usage/how-to
+  if (/how to use|instructions|how does it work|usage/.test(lower))
+    return "productUsage";
+
+  // Product warranty
+  if (/warranty|guarantee|warranty period|is it under warranty/.test(lower))
+    return "productWarranty";
+
+  // Fallback
+  return "unknown";
 }
 
 function generatePrompt(product, message) {
