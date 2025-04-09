@@ -148,7 +148,7 @@ app.post("/chat", async (req, res) => {
 
   try {
     const ollamaResponse = await axios.post(
-      "http://localhost:11434/api/generate",
+      "http://ollama:11434/api/generate",
       {
         model: "tinyllama",
         prompt,
