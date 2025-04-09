@@ -156,7 +156,8 @@ app.post("/chat", async (req, res) => {
       }
     );
     const aiMessage = ollamaResponse.data.response;
-    res.json({ response: aiMessage.trim() });
+    console.log(aiMessage);
+    res.json({ response: aiMessage?.trim() });
   } catch (err) {
     const errorResponse = {
       id: (Date.now() + 2).toString(),
@@ -165,7 +166,8 @@ app.post("/chat", async (req, res) => {
       timestamp: new Date(),
       productId,
     };
-    res.json({ response: errorResponse.trim() });
+    console.log(errorResponse);
+    res.json({ response: errorResponse?.trim() });
   }
 });
 
