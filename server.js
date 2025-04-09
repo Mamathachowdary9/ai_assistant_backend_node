@@ -137,85 +137,88 @@ const products = [
 function getIntentFromMessage(message) {
   const lower = message.toLowerCase();
 
-  // Refund status
   if (
-    /refund status|is my refund processed|has my refund been issued|when.*refund/.test(
+    /what.*(is|does).*product|product.*description|what does this product do|product features|tell me about the product|describe.*product/.test(
       lower
     )
   )
-    return "refundStatus";
+    return "productDescription";
 
-  // Refund amount
   if (
-    /refund amount|how much.*refund|amount refunded|how much will i get back/.test(
-      lower
-    )
-  )
-    return "refundAmount";
-
-  // Delivery details
-  if (
-    /delivery date|when.*arrive|expected delivery|shipping date|delivered by|delivery time/.test(
-      lower
-    )
-  )
-    return "deliveryDate";
-
-  // Product name/details
-  if (
-    /product name|what.*product|name of the item|what did i order|product details/.test(
-      lower
-    )
-  )
-    return "productName";
-
-  // Product price/cost
-  if (
-    /price|how much.*cost|cost of the product|what's the price|product cost/.test(
+    /how much.*(cost|price)|price.*product|what's the price|product.*price|cost of this/.test(
       lower
     )
   )
     return "price";
 
-  // Store policy (return, exchange, refund)
   if (
-    /return policy|refund policy|exchange policy|can i return|can i exchange|store policy/.test(
+    /what.*(product|item).*name|name of (this|the) product|product name|what did i order/.test(
       lower
     )
   )
-    return "storePolicy";
+    return "productName";
 
-  // Order status
   if (
-    /order status|where.*order|track my order|status of my order|order update/.test(
-      lower
-    )
-  )
-    return "orderStatus";
-
-  // Order summary/details
-  if (
-    /order summary|order details|what did i order|show me my order/.test(lower)
-  )
-    return "orderDetails";
-
-  // Product availability
-  if (
-    /is it in stock|availability|available now|can i buy it|available to order/.test(
+    /is it in stock|product.*availability|available now|can i buy it|product.*stock|still in stock/.test(
       lower
     )
   )
     return "productAvailability";
 
-  // Product usage/how-to
-  if (/how to use|instructions|how does it work|usage/.test(lower))
+  if (
+    /how to use|instructions|usage guide|how does it work|how do i use this|operate the product/.test(
+      lower
+    )
+  )
     return "productUsage";
 
-  // Product warranty
-  if (/warranty|guarantee|warranty period|is it under warranty/.test(lower))
+  if (
+    /warranty|guarantee|warranty period|is it under warranty|how long is warranty/.test(
+      lower
+    )
+  )
     return "productWarranty";
 
-  // Fallback
+  if (
+    /order.*status|where.*order|track.*order|status of.*order|order update/.test(
+      lower
+    )
+  )
+    return "orderStatus";
+
+  if (
+    /delivery.*(date|time)|when.*arrive|expected delivery|shipping date|delivered by/.test(
+      lower
+    )
+  )
+    return "deliveryDate";
+
+  if (
+    /refund.*status|has.*refund.*processed|is my refund done|when will i get refund/.test(
+      lower
+    )
+  )
+    return "refundStatus";
+
+  if (
+    /refund.*amount|how much.*refund|get back.*refund|amount refunded/.test(
+      lower
+    )
+  )
+    return "refundAmount";
+
+  if (
+    /return.*policy|refund policy|exchange policy|can i return|can i exchange|store policy/.test(
+      lower
+    )
+  )
+    return "storePolicy";
+
+  if (
+    /order summary|order details|what did i order|show me my order/.test(lower)
+  )
+    return "orderDetails";
+
   return "unknown";
 }
 
