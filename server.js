@@ -13,6 +13,19 @@ app.use(
 );
 app.use(express.json());
 
+const userDetails = [
+  {
+    userType: "user",
+    userName: "mamatha@gmail.com",
+    password: "mamatha123",
+  },
+  {
+    userType: "admin",
+    userName: "adminzitara@gmail.com",
+    password: "zitara@123",
+  },
+];
+
 function getIntentFromMessage(message) {
   const lower = message.toLowerCase();
 
@@ -164,6 +177,23 @@ app.post("/chat", async (req, res) => {
   } catch (error) {
     console.error("Hugging Face Error:", error.message);
     res.status(500).json({ error: "Failed to generate AI response" });
+  }
+});
+
+app.post("/login", async (req, res) => {
+  const { userName, password } = req.body;
+
+  const matchedUser = userDetails.find(
+    (user) => user.userName === userName && user.password === password
+  );
+
+  if (matchedUser) {
+    return res.status(200).json({
+      message: "Login successful",
+      userType: matchedUser.userType,
+    });
+  } else {
+    return res.status(401).json({ message: "Invalid credentials" });
   }
 });
 
