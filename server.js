@@ -11,6 +11,7 @@ app.use(
     origin: process.env.FRONTEND_ORIGIN,
   })
 );
+
 app.use(express.json());
 
 const userDetails = [
@@ -182,7 +183,6 @@ app.post("/chat", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { userName, password } = req.body;
-
   const matchedUser = userDetails.find(
     (user) => user.userName === userName && user.password === password
   );
